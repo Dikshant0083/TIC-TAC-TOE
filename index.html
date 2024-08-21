@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>X | O</title>
+    <style>
+        
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+    background: #404258;
+}
+
+.container{
+    width: 500px;
+}
+
+.container h2{
+    font-size: 45px;
+    font-weight: 700;
+    text-align: center;
+    padding: 15px;
+    color: #fff;
+}
+
+.container .squres{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .squres div{
+    width: 150px;
+    height: 150px;
+    background: #fff;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #50577a;
+    border-radius: 12px;
+   
+}
+
+.player-1,
+.player-2{
+    width: 150px;
+    height: 150px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 12px;
+
+}
+
+.player-1 h1,
+.player-2 h1{
+    color: #50577a;
+    font-size: 1.8rem;
+}
+
+.player-1 p,
+.player-2 p{
+    font-size: 3rem;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+.disable{
+    pointer-events: none;
+    opacity: 0.8;
+}
+.play-again-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  
+}
+
+.play-again-btn:hover {
+    background-color: #3e8e41;
+}
+.reset-score-btn {
+            background-color: #FF0000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+
+        .reset-score-btn:hover {
+            background-color: #FF3737;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="player-1">
+        <h1> X-Score</h1>
+        <p>0</p>
+    </div>
+    <div class="container" style="text-align: center;">
+        <h2 class="title">TIC-TAC-TOE (X/O) Game</h2>
+        <div class="squres">
+            <div id="box1" onclick="game(this.id)"></div>
+            <div id="box2" onclick="game(this.id)"></div>
+            <div id="box3" onclick="game(this.id)"></div>
+
+            <div id="box4" onclick="game(this.id)"></div>
+            <div id="box5" onclick="game(this.id)"></div>
+            <div id="box6" onclick="game(this.id)"></div>
+            
+            <div id="box7" onclick="game(this.id)"></div>
+            <div id="box8" onclick="game(this.id)"></div>
+            <div id="box9" onclick="game(this.id)"></div>
+       
+        </div>
+        <br> <br>
+        <button class="play-again-btn" onclick="resetGame()">Play Again</button>
+        <button class="reset-score-btn" onclick="resetScore()">Reset Score</button>
+    </div>
+    </div>
+    <div class="player-2">
+        <h1> O-Score</h1>
+        <p>0</p>
+    </div>
+    <script >
+        let title = document.querySelector('.title');
+let currentPlayer = 'x';
+let squares = [];
+
+let player1 = document.querySelector('.player-1 p');
+let player2 = document.querySelector('.player-2 p');
+let score = { X: 0, O: 0 };
+
+function winner(num1, num2, num3){
+    title.innerHTML = `${squares[num1]} Is the winner`;
+    document.getElementById('box' + num1).style.background = '#6B728E';
+    document.getElementById('box' + num2).style.background = '#6B728E';
+    document.getElementById('box' + num3).style.background = '#6B728E';
+
+    if(`${squares[num1]}` === 'x'){
+        score.X += 1;
+        player1.innerHTML = score.X;
+    }
+    else if(`${squares[num1]}` === 'o'){
+        score.O += 1;
+        player2.innerHTML = score.O;
+    }
+
+    disable();
+    
+    setTimeout(function(){resetGame(num1, num2, num3)}, 1500);
+}
+
+function check(){
+    for(let i = 1; i < 10; i++){
+        squares[i] = document.getElementById('box' + i).innerHTML;
+    }
+
+    if(squares[1] == squares[2] && squares[2] == squares[3] && squares[1] != ''){
+        winner(1, 2, 3)
+    }
+    else if(squares[4] == squares[5] && squares[5] == squares[6] && squares[4] != ''){
+        winner(4, 5, 6)
+    }
+    else if(squares[7] == squares[8] && squares[8] == squares[9] && squares[7] != ''){
+        winner(7, 8, 9)
+    }
+
+   
+    else if(squares[1] == squares[4] && squares[4] == squares[7] && squares[1] != ''){
+        winner(1, 4, 7)
+    }
+    else if(squares[2] == squares[5] && squares[5] == squares[8] && squares[2] != ''){
+        winner(2, 5, 8)
+    }
+    else if(squares[3] == squares[6] && squares[6] == squares[9] && squares[3] != ''){
+        winner(3, 6, 9)
+    }
+
+   
+    else if(squares[1] == squares[5] && squares[5] == squares[9] && squares[1] != ''){
+        winner(1, 5, 9)
+    }
+    else if(squares[3] == squares[5] && squares[5] == squares[7] && squares[3] != ''){
+        winner(3, 5, 7)
+    }   
+}
+
+function game(id){
+    let element = document.getElementById(id);
+
+    if(currentPlayer === 'x' && element.innerHTML === ''){
+        element.innerHTML = 'x';
+        currentPlayer = 'o'
+        title.innerHTML = 'O: Turn'
+    }
+    else if(currentPlayer === 'o' && element.innerHTML === ''){
+        element.innerHTML = 'o';
+        currentPlayer = 'x';
+        title.innerHTML = 'X: Turn'
+    }
+
+    check();
+    }
+  
+
+    function resetGame() {
+  for(let i = 1; i < 10; i++){
+    document.getElementById('box' + i).innerHTML = '';
+    document.getElementById('box' + i).style.background = '#fff';
+    document.getElementById('box' + i).classList.remove("disable");
+  }
+  title.innerHTML = 'X: Turn'
+  currentPlayer = 'x';
+}
+
+function resetScore() {
+  score.X = 0;
+  score.O = 0;
+  player1.innerHTML = score.X;
+  player2.innerHTML = score.O;
+}
+
+function disable(){
+    for(let i = 1; i < 10; i++){
+        document.getElementById('box' + i).classList.add("disable");
+    }
+}
+    </script>
+</body>
+</html>
